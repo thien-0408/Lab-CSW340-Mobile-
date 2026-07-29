@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import ContactThum from './ContactThum';
 import DetailListItem from './DetailListItem';
-import { toggleFavorite } from './storage';
+import { toggleFavorite } from '../utilities/api';
 
 const ProfileContact = ({ route }) => {
   const { contact } = route.params;

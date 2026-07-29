@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import ContactListItem from './ContactListItem';
-import { loadContacts } from './storage';
+import { loadContacts } from '../utilities/api';
 
 const keyExtractor = ({ id }) => id;
 
