@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import ContactListItem from './ContactListItem';
 import { loadContacts } from '../utilities/api';
@@ -11,27 +11,36 @@ const Contacts = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      loadContacts()
-        .then((data) => setContacts(data))
-        .catch(() => {});
+      const run = async () => {
+        try {
+          const data = await loadContacts();
+          setContacts(data);
+        } catch (e) {
+          console.log('loadContacts error:', e);
+          Alert.alert('Error', e?.message ?? String(e));
+        }
+      };
+
+      run();
     }, [])
   );
 
-  const renderContacts = ({ item }) => {
-    const { name, avatar, phone } = item;
-    return (
-      <ContactListItem
-        name={name}
-        avatar={avatar}
-        phone={phone}
-        onPress={() => navigation.navigate('ProfileContact', { contact: item })}
-      />
-    );
-  };
+  const renderContacts = ({ item }) => (
+    <ContactListItem
+      name={item.name}
+      avatar={item.avatar}
+      phone={item.phone}
+      onPress={() => navigation.navigate('ProfileContact', { contact: item })}
+    />
+  );
 
   return (
     <View style={styles.container}>
-      <FlatList data={contacts} keyExtractor={keyExtractor} renderItem={renderContacts} />
+      <FlatList
+        data={contacts}
+        keyExtractor={keyExtractor}
+        renderItem={renderContacts}
+      />
     </View>
   );
 };
