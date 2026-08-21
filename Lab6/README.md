@@ -1,11 +1,21 @@
-# Sample Snack app
+# Lab 6 - KAMI Spa (AsyncStorage & Fetch API / Axios - Part II)
 
-Open the `App.js` file to start writing some code. You can preview the changes directly on your phone or tablet by scanning the **QR code** or use the iOS or Android emulators. When you're done, click **Save** and share the link!
+Builds on Lab 5. Adds Customer and Transaction modules plus bottom tab navigation
+(Home / Transaction / Customer / Setting).
 
-When you're ready to see everything that Expo provides (or if you want to use your own editor) you can **Download** your project and use it with [expo cli](https://docs.expo.dev/get-started/installation/#expo-cli)).
+## New features
+- Customer list + add customer
+- Transaction list + transaction detail (read-only)
+- Setting screen with logout
 
-All projects created in Snack are publicly available, so you can easily share the link to this project via link, or embed it on a web page with the `<>` button.
+## API additions
+- `GET /customers`, `POST /customers` (name, phone)
+- `GET /transactions`, `GET /transactions/{_id}`
 
-If you're having problems, you can tweet to us [@expo](https://twitter.com/expo) or ask in our [forums](https://forums.expo.dev/c/expo-dev-tools/61) or [Discord](https://chat.expo.dev/).
+Test account: `0373007856` / `123`
 
-Snack is Open Source. You can find the code on the [GitHub repo](https://github.com/expo/snack).
+## Run
+```
+npm i
+npx expo start
+```
