@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, TextInput, Button } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
 import { colors } from '../theme';
@@ -27,34 +28,37 @@ export default function LoginScreen() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        mode="outlined"
-        label="Phone"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-        style={styles.input}
-      />
-      <TextInput
-        mode="outlined"
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={secure}
-        right={<TextInput.Icon icon={secure ? 'eye' : 'eye-off'} onPress={() => setSecure(!secure)} />}
-        style={styles.input}
-      />
-      <Button mode="contained" onPress={handleLogin} loading={loading} buttonColor={colors.primary} style={styles.button}>
-        Login
-      </Button>
-    </KeyboardAvoidingView>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+          mode="outlined"
+          label="Phone"
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="phone-pad"
+          style={styles.input}
+        />
+        <TextInput
+          mode="outlined"
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={secure}
+          right={<TextInput.Icon icon={secure ? 'eye' : 'eye-off'} onPress={() => setSecure(!secure)} />}
+          style={styles.input}
+        />
+        <Button mode="contained" onPress={handleLogin} loading={loading} buttonColor={colors.primary} style={styles.button}>
+          Login
+        </Button>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: colors.background },
+  container: { flex: 1, backgroundColor: colors.background },
+  flex: { flex: 1, justifyContent: 'center', padding: 24 },
   title: { fontSize: 36, fontWeight: 'bold', color: colors.primary, textAlign: 'center', marginBottom: 32 },
   input: { marginBottom: 16, backgroundColor: colors.surface },
   button: { marginTop: 8, borderRadius: 8, paddingVertical: 4 },

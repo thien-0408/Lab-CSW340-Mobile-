@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, TextInput, Button, Text, ActivityIndicator } from 'react-native-paper';
 import { addCustomer, getCustomer, updateCustomer } from '../api/customers';
 import { colors } from '../theme';
@@ -50,7 +51,7 @@ export default function CustomerFormScreen({ route, navigation }) {
   if (loading) return <ActivityIndicator style={{ marginTop: 40 }} color={colors.primary} />;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: colors.primary }}>
         <Appbar.BackAction color="#fff" onPress={() => navigation.goBack()} />
         <Appbar.Content title="Add customer" color="#fff" />
@@ -77,7 +78,7 @@ export default function CustomerFormScreen({ route, navigation }) {
           {isEdit ? 'Update' : 'Add'}
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

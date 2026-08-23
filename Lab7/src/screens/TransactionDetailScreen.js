@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Appbar, Text, ActivityIndicator, Divider } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Appbar, Text, ActivityIndicator, Divider, Menu } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getTransaction, deleteTransaction } from '../api/transactions';
 import { colors } from '../theme';
 import { formatCurrency, formatDateTime } from '../utils/format';
@@ -21,6 +20,7 @@ export default function TransactionDetailScreen({ route, navigation }) {
   const { id } = route.params;
   const [tx, setTx] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const load = async () => {
     try {
@@ -42,6 +42,7 @@ export default function TransactionDetailScreen({ route, navigation }) {
   const isCancelled = tx?.status === 'cancelled' || tx?.status === 'canceled';
 
   const confirmCancel = () => {
+    setMenuVisible(false);
     Alert.alert(
       'Warning',
       'Are you sure you want to cancel this transaction? This will affect the customer transaction information',
@@ -69,18 +70,23 @@ export default function TransactionDetailScreen({ route, navigation }) {
   const discount = (tx?.priceBeforePromotion ?? total) - (tx?.price ?? total);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: isCancelled ? colors.danger : colors.primary }}>
         <Appbar.BackAction color="#fff" onPress={() => navigation.goBack()} />
         <Appbar.Content title="Transaction detail" color="#fff" />
-        <Menu>
-          <MenuTrigger customStyles={{ triggerWrapper: styles.menuTrigger }}>
-            <MaterialCommunityIcons name="dots-vertical" size={24} color="#fff" />
-          </MenuTrigger>
-          <MenuOptions>
-            <MenuOption onSelect={load} text="See more details" />
-            {!isCancelled && <MenuOption onSelect={confirmCancel} text="Cancel transaction" />}
-          </MenuOptions>
+        <Menu
+          visible={menuVisible}
+          onDismiss={() => setMenuVisible(false)}
+          anchor={<Appbar.Action icon="dots-vertical" color="#fff" onPress={() => setMenuVisible(true)} />}
+        >
+          <Menu.Item
+            onPress={() => {
+              setMenuVisible(false);
+              load();
+            }}
+            title="See more details"
+          />
+          {!isCancelled && <Menu.Item onPress={confirmCancel} title="Cancel transaction" />}
         </Menu>
       </Appbar.Header>
       <ScrollView contentContainerStyle={styles.body}>
@@ -103,13 +109,12 @@ export default function TransactionDetailScreen({ route, navigation }) {
         <Row label="Discount" value={`-${formatCurrency(discount)}`} />
         <Row label="Total payment" value={formatCurrency(tx?.price ?? total)} bold highlight />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  menuTrigger: { paddingHorizontal: 16 },
   body: { padding: 16 },
   section: { color: colors.primary, fontWeight: '700', marginTop: 16, marginBottom: 8 },
   divider: { marginVertical: 8 },

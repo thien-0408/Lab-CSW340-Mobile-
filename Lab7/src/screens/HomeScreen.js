@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { View, FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Text, ActivityIndicator, FAB } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { getServices } from '../api/services';
@@ -37,7 +38,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: colors.primary }}>
         <Appbar.Content title={phone || 'KAMI SPA'} color="#fff" />
         <Appbar.Action icon="account-circle" color="#fff" onPress={() => {}} />
@@ -58,7 +59,7 @@ export default function HomeScreen({ navigation }) {
         />
       )}
       <FAB icon="plus" style={styles.fab} color="#fff" onPress={() => navigation.navigate('ServiceForm')} />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Text, ActivityIndicator, FAB } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 import { getTransactions } from '../api/transactions';
@@ -28,7 +29,7 @@ export default function TransactionListScreen({ navigation }) {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: colors.primary }}>
         <Appbar.Content title="Transaction" color="#fff" />
       </Appbar.Header>
@@ -46,7 +47,7 @@ export default function TransactionListScreen({ navigation }) {
         />
       )}
       <FAB icon="plus" style={styles.fab} color="#fff" onPress={() => navigation.navigate('AddTransaction')} />
-    </View>
+    </SafeAreaView>
   );
 }
 

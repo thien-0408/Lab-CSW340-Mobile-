@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { Appbar, Text, ActivityIndicator } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Appbar, Text, ActivityIndicator, Menu } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCustomer, deleteCustomer } from '../api/customers';
 import { colors } from '../theme';
 import { formatCurrency, formatDateTime } from '../utils/format';
@@ -13,6 +12,7 @@ export default function CustomerDetailScreen({ route, navigation }) {
   const { id } = route.params;
   const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const load = async () => {
     try {
@@ -32,6 +32,7 @@ export default function CustomerDetailScreen({ route, navigation }) {
   );
 
   const confirmDelete = () => {
+    setMenuVisible(false);
     Alert.alert(
       'Alert',
       'Are you sure you want to remove this client? This will not be possible to return',
@@ -58,18 +59,23 @@ export default function CustomerDetailScreen({ route, navigation }) {
   const transactions = customer?.transactions || [];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: colors.primary }}>
         <Appbar.BackAction color="#fff" onPress={() => navigation.goBack()} />
         <Appbar.Content title="Customer detail" color="#fff" />
-        <Menu>
-          <MenuTrigger customStyles={{ triggerWrapper: styles.menuTrigger }}>
-            <MaterialCommunityIcons name="dots-vertical" size={24} color="#fff" />
-          </MenuTrigger>
-          <MenuOptions>
-            <MenuOption onSelect={() => navigation.navigate('CustomerForm', { id })} text="Edit" />
-            <MenuOption onSelect={confirmDelete} text="Delete" />
-          </MenuOptions>
+        <Menu
+          visible={menuVisible}
+          onDismiss={() => setMenuVisible(false)}
+          anchor={<Appbar.Action icon="dots-vertical" color="#fff" onPress={() => setMenuVisible(true)} />}
+        >
+          <Menu.Item
+            onPress={() => {
+              setMenuVisible(false);
+              navigation.navigate('CustomerForm', { id });
+            }}
+            title="Edit"
+          />
+          <Menu.Item onPress={confirmDelete} title="Delete" />
         </Menu>
       </Appbar.Header>
       <ScrollView contentContainerStyle={styles.body}>
@@ -101,13 +107,12 @@ export default function CustomerDetailScreen({ route, navigation }) {
           <TransactionCard key={tx._id} transaction={tx} onPress={() => navigation.navigate('TransactionDetail', { id: tx._id })} />
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  menuTrigger: { paddingHorizontal: 16 },
   body: { padding: 16 },
   section: { color: colors.primary, fontWeight: '700', marginBottom: 8 },
   row: { marginBottom: 8 },

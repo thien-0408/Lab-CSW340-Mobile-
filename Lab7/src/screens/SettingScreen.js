@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Button } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
 import { colors } from '../theme';
@@ -15,7 +16,7 @@ export default function SettingScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: colors.primary }}>
         <Appbar.Content title="Setting" color="#fff" />
       </Appbar.Header>
@@ -24,7 +25,7 @@ export default function SettingScreen() {
           Logout
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

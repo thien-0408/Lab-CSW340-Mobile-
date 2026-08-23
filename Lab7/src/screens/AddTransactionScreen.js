@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, Text, Button, ActivityIndicator } from 'react-native-paper';
 import { Dropdown } from 'react-native-element-dropdown';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -78,7 +79,7 @@ export default function AddTransactionScreen({ navigation }) {
   if (loading) return <ActivityIndicator style={{ marginTop: 40 }} color={colors.primary} />;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: colors.primary }}>
         <Appbar.BackAction color="#fff" onPress={() => navigation.goBack()} />
         <Appbar.Content title="Add transaction" color="#fff" />
@@ -127,7 +128,7 @@ export default function AddTransactionScreen({ navigation }) {
       <Button mode="contained" onPress={handleSubmit} loading={saving} buttonColor={colors.primary} style={styles.submit}>
         See summary: ({formatCurrency(total)})
       </Button>
-    </View>
+    </SafeAreaView>
   );
 }
 
