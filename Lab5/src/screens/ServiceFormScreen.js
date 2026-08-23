@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appbar, TextInput, Button, Text, ActivityIndicator } from 'react-native-paper';
 import { addService, getService, updateService } from '../api/services';
 import { colors } from '../theme';
@@ -50,7 +51,7 @@ export default function ServiceFormScreen({ route, navigation }) {
   if (loading) return <ActivityIndicator style={{ marginTop: 40 }} color={colors.primary} />;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <Appbar.Header style={{ backgroundColor: colors.primary }}>
         <Appbar.BackAction color="#fff" onPress={() => navigation.goBack()} />
         <Appbar.Content title="Service" color="#fff" />
@@ -76,7 +77,7 @@ export default function ServiceFormScreen({ route, navigation }) {
           {isEdit ? 'Update' : 'Add'}
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
